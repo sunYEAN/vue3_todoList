@@ -1,5 +1,5 @@
 <template>
-    <section class="list-item">
+    <section class="list-item" @click="handleItemClick(item)">
         <h3 class="item-t">{{item.title}}</h3>
         <p class="item-c">{{item.content}}</p>
         <p class="item-a">
@@ -14,35 +14,52 @@
         props: {
             item: {
                 type: Object,
-                default () {
+                default() {
                     return {}
                 }
             }
         },
-        name: "Card"
+        name: "Card",
+        methods: {
+            handleItemClick(item) {
+                this.$emit('onselected', item);
+            }
+        }
     }
 </script>
 
 <style scoped lang="less">
-    .list-item{
+    .list-item {
         width: calc(100% - 20px);
         margin: 14px auto 0;
         padding: 10px;
         box-sizing: border-box;
-        box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.2);
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+        transition: all 0.1s ease-in-out;
         border-radius: 4px;
         background-color: #ffffff;
-        .item-t{
+        &:active,&:visited{
+            color: #999;
+            box-shadow: none;
+            background-color: rgba(0,0,0,0.1);
+            .item-c, .item-a{
+                color: #999;
+            }
+        }
+
+        .item-t {
             padding: 6px 0 8px 0;
             font-size: 17px;
             border-bottom: 1px solid #d0d0d0;
         }
-        .item-c{
+
+        .item-c {
             color: #666;
             margin-top: 8px;
             line-height: 1.4;
         }
-        .item-a{
+
+        .item-a {
             color: #999;
             display: flex;
             font-size: 12px;

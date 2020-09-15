@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <card v-for="i in state.list" :item="i" :key="i.id"/>
+        <card @onselected="handleSelected" v-for="i in state.list" :item="i" :key="i.id"/>
     </div>
 </template>
 
@@ -11,8 +11,12 @@
     export default {
         name: "home",
         components: {Card},
+        methods: {
+            handleSelected (item) {
+                this.$router.push('/detail/' + item.id);
+            }
+        },
         setup() {
-
             const state = reactive({
                 list: [
                     {
