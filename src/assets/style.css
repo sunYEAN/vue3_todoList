@@ -1,0 +1,14 @@
+.opacity-enter-active,.opacity-leave-active{
+    opacity: 1;
+    transition: opacity 0.2s linear;
+}
+.opacity-enter-from,.opacity-leave-to{
+    opacity: 0;
+}
+.translateX-enter-active,.translateX-leave-active{
+    transform: translateX(0);
+    transition: all 0.2s linear;
+}
+.translateX-enter-from,.translateX-leave-to{
+    transform: translateX(-100%);
+}
