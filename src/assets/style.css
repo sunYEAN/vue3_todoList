@@ -1,14 +1,24 @@
 .opacity-enter-active,.opacity-leave-active{
     opacity: 1;
-    transition: opacity 0.2s linear;
+    transition: opacity 0.3s ease-in-out;
 }
 .opacity-enter-from,.opacity-leave-to{
-    opacity: 0;
+    opacity: 0.2;
 }
 .translateX-enter-active,.translateX-leave-active{
     transform: translateX(0);
-    transition: all 0.2s linear;
+    transition: all 0.3s ease-in-out;
 }
 .translateX-enter-from,.translateX-leave-to{
     transform: translateX(-100%);
+}
+
+.scaleIn-enter-active,.scaleIn-leave-active{
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.1s ease-in-out;
+}
+.scaleIn-enter-from,.scaleIn-leave-to{
+    opacity: 0;
+    transform: scale(1.2);
 }

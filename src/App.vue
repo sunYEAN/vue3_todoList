@@ -16,7 +16,6 @@
 
         const showSideBar = function () {
             visible.value = !visible.value;
-            console.log(visible.value);
         };
 
         return {

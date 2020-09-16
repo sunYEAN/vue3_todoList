@@ -1,5 +1,7 @@
 function getLocalStorage(key) {
+    console.log(key);
     const v = localStorage.getItem(key);
+    console.log(v);
     return v ? JSON.parse(v) : v;
 }
 
