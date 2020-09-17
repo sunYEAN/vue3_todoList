@@ -35,7 +35,6 @@
 
 <script>
     import {reactive} from 'vue';
-    import {useCategories} from '../../useCategories'
 
     const colors = [
         '',
@@ -56,7 +55,11 @@
     export default {
         name: "formTable",
         props: {
-            visible: Boolean
+            visible: Boolean,
+            addOne: {
+                type: Function,
+                default: () => {}
+            }
         },
         setup(props, context) {
             let form = reactive({
@@ -65,21 +68,15 @@
                 colors: colors
             });
 
-            let {categories, addOne} = useCategories();
-
             function handleClosed(e) {
-                if (e.target.dataset.type === 'mask') context.emit('update:visible', false);
+                if (e.target.dataset.type !== 'mask') return;
+                context.emit('update:visible', false);
             }
 
             function handleSave () {
                 const {name, color} = form;
-                if (categories.value.find(item => item.name === name)) {
-                    alert('已经存在了');
-                } else {
-                    addOne({name, color});
-                    alert('保存成功!');
-                    context.emit('update:visible', false);
-                }
+                props.addOne({name, color});
+                context.emit('update:visible', false);
             }
 
             return {

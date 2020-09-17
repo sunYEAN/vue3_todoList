@@ -1,51 +1,30 @@
 <template>
-    <div>
-        <button class="toggle" @click="showSideBar">{{visible}}</button>
-        <side-bar v-model:visible="visible"/>
+    <div class="app">
         <router-view/>
     </div>
 </template>
 
 <script>
-    import {ref} from 'vue';
-    import SideBar from './components/SideBar'
-
-    // // sidebar相关逻辑
-    function useHandleSideBar () {
-        let visible = ref(false);
-
-        const showSideBar = function () {
-            visible.value = !visible.value;
-        };
-
-        return {
-            visible,
-            showSideBar
-        }
-    }
-
     export default {
         name: 'App',
-        components: {
-            SideBar
-        },
-        methods: {
-        },
-        setup () {
-
-            const {visible, showSideBar} = useHandleSideBar();
-
-            return {
-                visible,
-                showSideBar
-            }
-        }
     }
 </script>
 
+<style>
+    body{
+        font-size: 16px;
+    }
+    #app {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background-color: #f3f5f7;
+    }
+</style>
 <style scoped lang="less">
-    .app {
-        background-color: pink;
+    .app{
+        width: 100%;
+        height: 100%;
     }
     .toggle{
         position: fixed;

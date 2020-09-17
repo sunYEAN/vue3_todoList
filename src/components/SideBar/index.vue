@@ -4,12 +4,15 @@
             <aside v-if="status" class="side-bar">
                 <section class="banner"></section>
                 <section class="list">
-                    <div class="item sub-item" v-for="i in categories" :key="i.id">
+                    <div class="item sub-item" @click="onCategorySelected(i)" v-for="i in categories" :key="i.id">
                         <p class="cate-name">
                             <i class="icon_menu"></i>
                             <span>{{i.name}}</span>
                         </p>
-                        <i class="c-count">1</i>
+                        <p class="cate-status">
+                            <i class="color" :style="{background: i.color}"></i>
+                            <i class="c-count">1</i>
+                        </p>
                     </div>
                     <div class="cate-add" @click="showForm">
                         <i class="icon_plus"></i>添加
@@ -29,7 +32,7 @@
             </aside>
         </transition>
 
-        <form-table v-model:visible="formTable"></form-table>
+        <form-table :addOne="addOne" v-model:visible="formTable"></form-table>
     </v-mask>
 </template>
 
@@ -56,7 +59,10 @@
     export default {
         name: "sideBar",
         props: {
-            visible: Boolean
+            visible: Boolean,
+            onCategorySelected: Function
+        },
+        methods: {
         },
         components: {
             VMask,
@@ -67,9 +73,8 @@
             let list = ref([{title: 'Completed'}, {title: 'Trash'}]);
             let status = ref(props.visible);
 
-            const {categories, addOne, removeOne} = useCategories();
-
             const {formTable, showForm} = useFormTable();
+            const {categories, addOne, removeOne} = useCategories();
 
             watch(
                 () => props.visible,
@@ -104,13 +109,14 @@
     .sub-item{
         width: 100%;
         height: 40px;
-        margin: 10px auto 0;
+        margin: 0 auto;
         display: flex;
         padding: 0 10px;
+        z-index: 100;
+        transition: all 0.1s linear;
         box-sizing: border-box;
         align-items: center;
         border-radius: 2px;
-        transition: all 0.1s linear;
         justify-content: space-between;
         &:active,&:visited{
             transform: scale(0.9);
@@ -158,9 +164,20 @@
                         background-size: 90%;
                     }
                 }
-                .c-count{
-                    color: #999;
-                    font-size: 12px;
+                .cate-status{
+                    display: flex;
+                    align-items: center;
+                    .color{
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                    }
+                    .c-count{
+                        width: 20px;
+                        color: #999;
+                        font-size: 12px;
+                        text-align: right;
+                    }
                 }
                 .icon_plus{
                     width: 18px;
