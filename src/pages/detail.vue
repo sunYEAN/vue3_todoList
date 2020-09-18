@@ -27,30 +27,6 @@
                 <i class="icon-cate"></i>
                 <span>{{record.category}}</span>
             </div>
-            <!--<span class="time">-->
-            <!--<svg-->
-            <!--t="1600335929320"-->
-            <!--class="icon"-->
-            <!--viewBox="0 0 1024 1024"-->
-            <!--version="1.1"-->
-            <!--xmlns="http://www.w3.org/2000/svg"-->
-            <!--p-id="6488"-->
-            <!--width="18"-->
-            <!--height="18"-->
-            <!--&gt;-->
-            <!--<path-->
-            <!--d="M702.178304 511.314944 512.681984 511.314944l0-245.42208c0-18.556928-9.74848-33.605632-28.305408-33.605632-18.55488 0-28.30336 15.048704-28.30336 33.605632l0 268.510208c0 18.470912 15.050752 33.521664 33.52064 33.521664l212.585472 0c18.556928 0 33.521664-9.749504 33.52064-28.304384C735.699968 521.063424 720.735232 511.314944 702.178304 511.314944z"-->
-            <!--p-id="6489"-->
-            <!--fill="#707070"-->
-            <!--/>-->
-            <!--<path-->
-            <!--d="M511.998976 64.510976C264.865792 64.510976 64.512 264.866816 64.512 512c0 247.131136 200.353792 447.486976 447.486976 447.486976C759.13216 959.486976 959.488 759.131136 959.488 512 959.488 264.866816 759.13216 64.510976 511.998976 64.510976zM511.998976 903.563264c-216.261632 0-391.56224-175.302656-391.56224-391.56224 0-216.261632 175.300608-391.564288 391.56224-391.564288s391.564288 175.301632 391.564288 391.564288C903.563264 728.260608 728.260608 903.563264 511.998976 903.563264z"-->
-            <!--p-id="6490"-->
-            <!--fill="#707070"-->
-            <!--/>-->
-            <!--</svg>-->
-            <!--{{record.time}}-->
-            <!--</span>-->
         </header>
         <article ref="elArticle" @touchmove.prevent>
             <div class="wrapper">
@@ -124,7 +100,7 @@
 <script>
     import {reactive, onMounted, onBeforeUnmount, ref} from "vue";
     import {useRoute} from "vue-router";
-    import {getLocalStorage, getRound, getCenterPoint} from "../utils";
+    import {getLocalStorage, getCenterPoint, getRound} from "../utils";
     import IScroll from 'iscroll/build/iscroll-probe';
 
     function getCurrentRecord({category, id}) {
@@ -133,12 +109,17 @@
         return records.find(item => item.id == id) || {};
     }
 
+    function getAnimation (fromEl, toEl) {
+        const {y, originX} = getCenterPoint(fromEl);
+        const {y: y1, originX: originX1} = getCenterPoint(toEl);
+        return {
+            disX: getRound(originX1 - originX),
+            disY: getRound(y1 - y),
+        }
+    }
+
     function useTouchEvent() {
         let scroller = null;
-        let tBound = {}; // title的getBoundingClientRect
-        let cBound = {}; // copyTitle的getBoundingClientRect
-        let cateBound = {};
-        let copyBound = {};
 
         const elCate = ref(null);
         const elTitle = ref(null);
@@ -151,10 +132,16 @@
             let {y} = scroller;
             y = Math.abs(y);
 
+            const {disX, disY} = getAnimation(elTitleCopy.value, elTitle.value);
+            const percent = getRound(Math.max(Math.min(Math.abs(y / disY), 1), 0));
+            elTitle.value.style.cssText = `opacity: ${1 - percent}; transform: translateY(${percent * disY}px)`;
+            elTitleCopy.value.style.cssText = `opacity: ${percent}; transform: translate(${percent * disX}px, ${percent * disY}px)`;
 
-            const percent = getRound(Math.min)
-            elTitle.value.style.cssText = `opacity: ${1 - percent}; transform: translateY(${-percent * t_max}px)`;
-            elTitleCopy.value.style.cssText = `opacity: ${percent}; transform: translate(${-percent * t_x}px, ${-percent * t_max}px)`;
+
+            const {disY: disCateY} = getAnimation(elCateCopy.value, elCate.value);
+            const percentCate = getRound(Math.max(Math.min(Math.abs((y - disY) / disCateY), 1), 0));
+            console.log(percentCate);
+            elCateCopy.value.style.cssText = `opacity: ${1 - percent}; transform: translateY(${percentCate * disCateY}px)`;
 
             // if (y > 0 && y < disY) {
             // }
@@ -169,11 +156,6 @@
         }
 
         onMounted(() => {
-            tBound = elTitle.value.getBoundingClientRect();
-            cBound = elTitle.value.getBoundingClientRect();
-            cateBound = elTitle.value.getBoundingClientRect();
-            copyBound = elTitle.value.getBoundingClientRect();
-
             scroller = new IScroll(elArticle.value, {
                 bounce: false,
                 probeType: 3,
@@ -263,7 +245,7 @@
             height: 60px;
             padding: 0 10px;
             display: flex;
-            /*overflow: hidden;*/
+            overflow: hidden;
             position: absolute;
             box-sizing: border-box;
             align-items: center;

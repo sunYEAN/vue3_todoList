@@ -16,18 +16,22 @@ function getRound (number, offset = 100) {
 }
 
 function getCenterPoint(el, offset = true) {
-    const {left, top, width, height} = el.getBoundingClientRect();
+    const {x, y, width, height} = el.getBoundingClientRect();
     if (offset) {
         let y = el.offsetTop;
         let x = el.offsetLeft;
         return {
-            x: x + width / 2,
-            y: y + height/ 2
+            x: getRound(x + width / 2),
+            y: getRound(y + height/ 2),
+            originX: x,
+            originY: y
         };
     }
     return {
-        x: left + width / 2,
-        y: top + height / 2
+        x: getRound(x + width / 2),
+        y: getRound(y + height / 2),
+        originX: x,
+        originY: y
     }
 }
 
