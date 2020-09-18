@@ -12,7 +12,7 @@
 
 <style>
     body{
-        font-size: 16px;
+        font-size: 18px;
     }
     #app {
         width: 100%;

@@ -82,7 +82,7 @@
 					color: #a0a0a0;
 					position: absolute;
 					transform: translateY(-50%);
-					font-size: 12px;
+					font-size: 16px;
 				}
             }
             .desc{

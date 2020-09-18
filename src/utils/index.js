@@ -11,7 +11,29 @@ function setLocalStorage(key, value) {
     localStorage.setItem(key, value);
 }
 
+function getRound (number, offset = 100) {
+    return Math.round(offset * number) / offset;
+}
+
+function getCenterPoint(el, offset = true) {
+    const {left, top, width, height} = el.getBoundingClientRect();
+    if (offset) {
+        let y = el.offsetTop;
+        let x = el.offsetLeft;
+        return {
+            x: x + width / 2,
+            y: y + height/ 2
+        };
+    }
+    return {
+        x: left + width / 2,
+        y: top + height / 2
+    }
+}
+
 export {
+    getRound,
+    getCenterPoint,
     getLocalStorage,
     setLocalStorage
 }
